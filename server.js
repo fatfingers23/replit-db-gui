@@ -9,7 +9,13 @@ app.use(cors({
 app.use(express.json());
 
 app.use(function(req, res, next) {
-  if (!req.headers.db_url) {
+  const authURls = [
+    '/keys',
+    '/key',
+    '/delete/key',
+    '/keys/all'
+  ];
+  if (!req.headers.db_url && authURls.includes(req.path)) {
     return res.status(403).json({ error: 'Did not received the DB url in the header' });
   }
   next();

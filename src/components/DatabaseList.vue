@@ -104,7 +104,12 @@ async function getDbKeys() {
 }
 
 async function getKeyValue(key: string): Promise<void> {
-  client.getValue(key).then(x => values.value[key] = JSON.parse(x) );
+  client.getValue(key).then(x => {
+    //HACK Again reallllly should not do this
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    values.value[key] = JSON.parse(x);
+  });
 }
 
 function updateKeyValue(key:string): void {
@@ -127,7 +132,6 @@ async function deleteKey(key:string){
 async function downloadBackup(){
   const db = await client.getAll();
   let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(db));
-  console.log(dataStr);
   let downloadAnchorNode = document.createElement('a');
   downloadAnchorNode.setAttribute('href',     dataStr);
   const rightNow = new Date();

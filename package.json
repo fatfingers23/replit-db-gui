@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "lint": "eslint . --ext .ts --ext .vue",
     "lint:fix": "eslint . --fix --ext .ts --ext .vue",
-    "start:server": "node server.js"
+    "start:server": "node server.js",
+    "production": "vue-tsc --noEmit && vite build && node server.js"
   },
   "dependencies": {
     "@mdi/font": "7.0.96",
