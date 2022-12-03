@@ -6,8 +6,14 @@ const app = express();
 app.use(cors({
   origin: '*'
 }));
-// Middleware for serving '/dist' directory
-const staticFileMiddleware = express.static('dist');
+app.use(express.json());
+
+app.use(function(req, res, next) {
+  if (!req.headers.db_url) {
+    return res.status(403).json({ error: 'Did not received the DB url in the header' });
+  }
+  next();
+});
 
 
 app.get('/keys', async (req, res) => {
@@ -15,7 +21,6 @@ app.get('/keys', async (req, res) => {
   const prefix = req.query.prefix;
   const client = new Client(dbUrl);
   const keys = await client.list(prefix);
-  console.log(keys);
   res.json(keys);
 });
 
@@ -23,8 +28,7 @@ app.get('/key', async (req, res) => {
   const dbUrl = req.header('db_url');
   const name = req.query.name;
   const client = new Client(dbUrl);
-  const value = await client.get(name);
-  console.log(value);
+  const value = await client.get(name,{raw:true});
   res.json(value);
 });
 
@@ -32,10 +36,27 @@ app.post('/key', (req, res) => {
   const dbUrl = req.header('db_url');
   const name = req.query.name;
   const client = new Client(dbUrl);
-  client.set(name, req.body);
-  res.json();
+  client.set(name, req.body.updatedValue );
+  res.send('ok');
 });
 
+app.get('/delete/key', async (req, res) => {
+  const dbUrl = req.header('db_url');
+  const name = req.query.name;
+  const client = new Client(dbUrl);
+  await client.delete(name);
+  res.send('ok');
+});
+
+app.get('/keys/all', async (req, res) => {
+  const dbUrl = req.header('db_url');
+  const client = new Client(dbUrl);
+  const all = await client.getAll();
+  res.send(all);
+});
+
+// Middleware for serving '/dist' directory
+const staticFileMiddleware = express.static('dist');
 // 1st call for unredirected requests
 app.use(staticFileMiddleware);
 // Support history api
@@ -49,6 +70,7 @@ app.use(staticFileMiddleware);
 
 
 
-app.listen(3001, function () {
+app.listen(3001, function (err) {
+  if (err) console.log(err);
   console.log('Replit db API listening on port 3001!');
 });

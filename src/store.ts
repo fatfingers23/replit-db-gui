@@ -1,4 +1,4 @@
-import {reactive, ref} from 'vue';
+import {reactive} from 'vue';
 
 const setGetFriendlyDate = (timestamp: number): string => {
   const date = new Date(0);

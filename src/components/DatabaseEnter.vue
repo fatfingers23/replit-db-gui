@@ -8,6 +8,8 @@
           title="Enter your Replit DB URL"
           width="75%"
         >
+          <v-card-text>You can find your Replit DB Url by typing the command below into your Replit shell.</v-card-text>
+          <v-code>echo "$REPLIT_DB_URL"</v-code>
           <v-form v-on:submit="submit" v-model="form">
             <v-container>
               <v-text-field
@@ -26,7 +28,6 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-
               <v-btn color="success" type="submit" :disabled="!form">
                 View Database
                 <v-icon icon="mdi-chevron-right" end></v-icon>
