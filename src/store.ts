@@ -19,7 +19,6 @@ export default reactive({
       const tokenObjectFromLS = localStorage.getItem('token');
       if(dbUrlFromLS && tokenObjectFromLS){
         this.token = JSON.parse(tokenObjectFromLS);
-        console.log(this.token);
         this.dbUrl = dbUrlFromLS;
         return this.dbUrl;
       }

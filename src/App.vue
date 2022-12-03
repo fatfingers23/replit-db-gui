@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <v-app-bar v-show="hasUrl">
+    <v-app-bar v-show="store.dbUrl !== ''">
       <v-app-bar-title>{{ store.token.slug ?? 'Replit Name' }} User: {{ store.token['user'] }} </v-app-bar-title>
       <v-app-bar-title>Expires: {{ viewExpireDate }} issued at: {{ viewIssuedDate }} </v-app-bar-title>
     </v-app-bar>
     <v-main>
-      <database-enter v-show="!hasUrl" />
-      <database-list v-show="hasUrl" />
+      <database-enter v-show="store.dbUrl === ''" />
+      <database-list v-show="store.dbUrl !== ''" />
     </v-main>
   </v-app>
 </template>
@@ -18,10 +18,10 @@ import {ref} from 'vue';
 import DatabaseList from '@/components/DatabaseList.vue';
 
 store.getDbUrl();
-const hasUrl = ref(store.dbUrl !== '');
+
 let viewExpireDate = ref();
 let viewIssuedDate = ref();
-if(hasUrl.value){
+if(store.dbUrl !== ''){
   const expiredDate = new Date(0);
   const issuedDate = new Date(0);
   expiredDate.setSeconds(store.token.exp);
