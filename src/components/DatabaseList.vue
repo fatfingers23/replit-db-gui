@@ -63,12 +63,19 @@
                 <v-container>
                   <div class="d-flex justify-space-around mb-4">
                     <v-btn
+                      :disabled="disableSave[key]"
                       variant="outlined"
                       v-on:click="updateKeyValue(key)">
                       <v-icon>mdi-content-save</v-icon>
                       Save
                     </v-btn>
+                    <v-btn
+                      variant="outlined"
+                      v-on:click="simpleEditor = !simpleEditor">
+                      <v-icon>mdi-file-document-edit-outline</v-icon>
+                      {{simpleEditor ?   'Use the JSON Editor (for complex objects)'  : 'Use The Simple Editor (For string values)'}}
 
+                    </v-btn>
                     <v-btn
                       color="error"
                       variant="outlined"
@@ -78,8 +85,24 @@
                       Delete
                     </v-btn>
                   </div>
+                  <p v-show="!simpleEditor" class="text-h6">Note if there is no text below and this is a new key may have to click the three dots to create a new node</p>
+                  <p v-show="simpleEditor" class="text-h6">Note if the key's value is a JSON object this simple editor does not parse it, will want to use the JSON editor</p>
                   <v-expansion-panel-text v-show="values[key] === undefined">Loading...</v-expansion-panel-text>
-                  <json-editor-vue v-show="values[key] !== undefined" v-model="values[key]" class="jse-theme-dark"/>
+                  <v-container v-show="values[key] !== undefined">
+                    <json-editor-vue
+                      v-if="!simpleEditor && values[key] !== undefined"
+                      v-model="values[key]"
+                      class="jse-theme-dark"
+                      v-on:change="turnOnSave(key)"
+                    />
+                    <v-textarea
+                      v-show="simpleEditor"
+                      counter
+                      :label="`Simple editor for the key ${key}`"
+                      v-model="values[key]"
+                    ></v-textarea>
+                  </v-container>
+
                 </v-container>
               </v-expansion-panel-text>
 
@@ -99,7 +122,6 @@ import webclient from '@/services/webclient';
 import {debounce} from 'ts-debounce';
 import 'vanilla-jsoneditor/themes/jse-theme-dark.css';
 import JsonEditorVue from 'json-editor-vue';
-
 const client = new webclient(store.dbUrl);
 
 let keys = ref<string[]>([]);
@@ -108,6 +130,15 @@ const keyPrefix = ref('');
 type GenericObject = { [key: string]: any };
 let values = ref<GenericObject>({});
 let newKeyValue = ref('');
+let simpleEditor = ref(false);
+let disableSave = ref<{ [key: string]: boolean}>({});
+
+
+const turnOnSave = (key: string) => {
+  if(values.value[key] !== undefined){
+    disableSave.value[key] = false;
+  }
+};
 
 const getDbKeysDebounced = debounce(getDbKeys, 500);
 
@@ -118,6 +149,7 @@ async function getDbKeys() {
 }
 
 async function getKeyValue(key: string): Promise<void> {
+  disableSave.value[key] = true;
   client.getValue(key).then(x => {
     //HACK Again reallllly should not do this
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -128,6 +160,7 @@ async function getKeyValue(key: string): Promise<void> {
 
 function updateKeyValue(key: string): void {
   const updatedValue = values.value[key];
+  disableSave.value[key] = true;
   client.setValue(key, updatedValue);
 
 }
