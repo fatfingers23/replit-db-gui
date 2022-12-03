@@ -5,7 +5,7 @@ export default class Webclient{
 
   protected fetchOptions;
   protected errorMessage = 'Welp. That web call did not work. Going want to check console for more info.';
-  protected baseUrl = import.meta.env.VITE_BASE_NODE_URL ?? import.meta.env.BASE_URL;
+  protected baseUrl = import.meta.env.VITE_BASE_NODE_URL ?? '';
   constructor(dbUrl: string) {
     this.fetchOptions = {
       headers: new Headers({'db_url': dbUrl})
