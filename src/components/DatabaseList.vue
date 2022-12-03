@@ -11,7 +11,7 @@
               color="primary"
               label="Search For Key By Prefix"
               v-model="keyPrefix"
-              v-on:update:modelValue="getDbKeysDebounced">
+              v-on:update:modelValue="getDbKeysDebounced()">
 
             </v-text-field>
           </v-card-item>
@@ -47,7 +47,7 @@
                     </v-btn>
                   </div>
 
-                    <json-editor-vue v-model="values[key]"  class="jse-theme-dark" :onchange="valueEdited" />
+                    <json-editor-vue v-model="values[key]"  class="jse-theme-dark"/>
                 </v-container>
               </v-expansion-panel-text>
 
@@ -87,11 +87,6 @@ async function getKeyValue(key: string): Promise<void> {
   const result = client.getValue(key).then(x => values.value[key] = x);
 }
 
-async function valueEdited(oldVal, newval) {
-  console.log(oldVal);
-  console.log(newval);
-
-}
 
 getDbKeys();
 

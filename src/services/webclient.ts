@@ -24,7 +24,7 @@ export default class Webclient{
     }
   }
 
-  public async getValue(key:string): Promise<Promise<object> | Promise<Array<unknown>> | string>{
+  public async getValue(key:string): Promise<Promise<object> | Promise<Array<unknown>> | Promise<string>>{
     try {
       const result = await fetch(this.baseUrl + `/key?name=${key}` , this.fetchOptions);
       return await result.json();
