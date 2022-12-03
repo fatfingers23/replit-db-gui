@@ -11,6 +11,7 @@ This is just a simple GUI used for CRUD opertations on a Replt.it db
 * Add new Keys, then can edit the value
 * Download a backup of your server
 * (Coming soon?) Update from a backup
+* (Coming soon?) Repl Auth with saving databases to a profile
 
 ## Technology used
 * Vue 3
@@ -32,7 +33,7 @@ npm run build
 ### Runs the express node server that hosts an api and the Vue app
 
 ```
-npm run start:serrver
+npm run start:server
 ```
 
 Now you can visit [http://localhost:3001](http://localhost:3001) for the web app.

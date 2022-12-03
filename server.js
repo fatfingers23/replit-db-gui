@@ -42,7 +42,7 @@ app.post('/key', (req, res) => {
   const dbUrl = req.header('db_url');
   const name = req.query.name;
   const client = new Client(dbUrl);
-  client.set(name, req.body.updatedValue );
+  client.set(name, req.body.updatedValue);
   res.send('ok');
 });
 

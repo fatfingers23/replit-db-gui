@@ -17,6 +17,7 @@ export default reactive({
   },
   viewExpireDate: '',
   viewIssuedDate: '',
+  expiredToken: false,
   setDbUrl(url: string, tokenObject: object){
     localStorage.setItem('dbUrl', url);
     localStorage.setItem('token', JSON.stringify(tokenObject));
@@ -26,6 +27,7 @@ export default reactive({
     this.token = tokenObject;
     this.viewExpireDate = setGetFriendlyDate(this.token.exp);
     this.viewIssuedDate = setGetFriendlyDate(this.token.iat);
+    this.expiredToken = this.token.exp <  Math.floor(Date.now() / 1000);
     this.dbUrl = url;
   },
   getDbUrl(){
@@ -37,6 +39,7 @@ export default reactive({
         this.dbUrl = dbUrlFromLS;
         this.viewExpireDate = setGetFriendlyDate(this.token.exp);
         this.viewIssuedDate = setGetFriendlyDate(this.token.iat);
+        this.expiredToken = this.token.exp <  Math.floor(Date.now() / 1000);
         return this.dbUrl;
       }
     }
