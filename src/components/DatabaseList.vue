@@ -99,6 +99,7 @@
                       v-show="simpleEditor"
                       counter
                       :label="`Simple editor for the key ${key}`"
+                      v-on:change="turnOnSave(key)"
                       v-model="values[key]"
                     ></v-textarea>
                   </v-container>

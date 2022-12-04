@@ -6,7 +6,7 @@
       <v-btn variant="outlined" v-on:click="logout">logout</v-btn>
     </v-app-bar>
     <v-main>
-      <database-enter v-show="store.dbUrl === ''" />
+      <database-enter v-if="store.dbUrl === ''" />
       <database-list v-if="store.dbUrl !== ''" />
     </v-main>
   </v-app>
