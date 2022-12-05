@@ -5,6 +5,8 @@
         class="mx-auto"
         :title="`Your database for ${store.token.slug}`"
         v-model="panels">
+        <v-card-subtitle>The token is issued to {{store.token.user}} and expires at {{store.viewExpireDate}} and was issued at {{store.viewIssuedDate}}
+        </v-card-subtitle>
         <v-card-text v-if="store.expiredToken">
           <v-alert
             prominent
@@ -17,6 +19,8 @@
         <v-card-text v-if="!store.expiredToken">
           <v-container>
             <v-responsive>
+
+
               <v-text-field
                 color="primary"
                 label="Search For Key By Prefix"
@@ -117,13 +121,28 @@
 
 <script setup lang="ts">
 //
-import {ref} from 'vue';
+import {defineProps, ref} from 'vue';
 import store from '@/store';
 import webclient from '@/services/webclient';
 import {debounce} from 'ts-debounce';
 import 'vanilla-jsoneditor/themes/jse-theme-dark.css';
 import JsonEditorVue from 'json-editor-vue';
 const client = new webclient(store.dbUrl);
+
+const props = defineProps({
+  dbUrl: String,
+  token: {
+    type: Object,
+    default(){
+      return {
+        iat: 0,
+        exp:0,
+        user: '',
+        slug: '',
+      };
+    }
+  }
+});
 
 let keys = ref<string[]>([]);
 let panels = ref<string[]>([]);
@@ -133,7 +152,6 @@ let values = ref<GenericObject>({});
 let newKeyValue = ref('');
 let simpleEditor = ref(false);
 let disableSave = ref<{ [key: string]: boolean}>({});
-
 
 const turnOnSave = (key: string) => {
   if(values.value[key] !== undefined){

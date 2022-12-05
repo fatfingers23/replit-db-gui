@@ -38,22 +38,22 @@ npm run start:server
 
 Now you can visit [http://localhost:3001](http://localhost:3001) for the web app.
 
-### Developer setup
+## Developer setup
 
 ```
 npm install
 ```
 
-## Starting express server
+### Starting express server
 This hosts an API to be able to access a remote Replits db.
 The url should be [http://localhost:3001](http://localhost:3001). 
 ```
 npm run start:server
 ```
 
-## Starting Vite Vue server
+### Starting Vite Vue server
 
-Make a copy of `env.local.save` and make sure to set it to the value of your express server.
+Make a copy of `env.save` and make sure to set it to the value of your express server.
 Most of the time this will be `http://127.0.0.1:3001` with current config. Then run the below to start the Vue project.
 ```
 npm run dev

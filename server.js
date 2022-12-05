@@ -1,12 +1,25 @@
+/* eslint-disable no-undef */
 import express, {query} from 'express';
 import history from 'connect-history-api-fallback';
 import cors from 'cors';
 import Client from '@replit/database';
+import api from './api.js';
+import {getUserInfo} from '@replit/repl-auth';
+
 const app = express();
 app.use(cors({
-  origin: '*'
+  // eslint-disable-next-line no-undef
+  origin: [`https://replit.com/@${process.env.REPL_OWNER}/${process.env.REPL_SLUG}`,
+    `http://localhost:${process.env.VUE_DEV_PORT}`,
+    `http://127.0.0.1:${process.env.EXPRESS_DEV_PORT}`,
+    'http://127.0.0.1:3001/repl_auth']
 }));
 app.use(express.json());
+
+if(process.env.VITE_LOCAL_ONLY != 'true' || process.env.VITE_LOCAL_ONLY === 'undefined'){
+  app.use('/api',api);
+}
+
 
 app.use(function(req, res, next) {
   const authURls = [
@@ -15,12 +28,27 @@ app.use(function(req, res, next) {
     '/delete/key',
     '/keys/all'
   ];
+
   if (!req.headers.db_url && authURls.includes(req.path)) {
     return res.status(403).json({ error: 'Did not received the DB url in the header' });
   }
   next();
 });
 
+app.get('/repl_auth', async (req, res) => {
+  let userInfo = null;
+  //If running on repl get info from request
+  if(process.env.REPL_OWNER){
+    userInfo = getUserInfo(req);
+  }else if(process.env.TEST_REPL_USERNAME){
+    //if not running on a repl use a test user
+    userInfo = {
+      id: process.env.TEST_REPL_USER_ID,
+      name: process.env.TEST_REPL_USERNAME
+    };
+  }
+  res.json(userInfo);
+});
 
 app.get('/keys', async (req, res) => {
   const dbUrl = req.header('db_url');
@@ -75,8 +103,8 @@ app.use(history({
 app.use(staticFileMiddleware);
 
 
-
-app.listen(3001, function (err) {
+// eslint-disable-next-line no-undef
+app.listen(process.env.EXPRESS_DEV_PORT, function (err) {
   if (err) console.log(err);
   console.log('Replit db API listening on port 3001!');
 });

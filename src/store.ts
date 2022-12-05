@@ -6,6 +6,7 @@ const setGetFriendlyDate = (timestamp: number): string => {
   return date.toLocaleString();
 };
 
+const baseUrl = import.meta.env.VITE_BASE_NODE_URL ?? '';
 
 export default reactive({
   dbUrl: '',
@@ -30,7 +31,7 @@ export default reactive({
     this.expiredToken = this.token.exp <  Math.floor(Date.now() / 1000);
     this.dbUrl = url;
   },
-  getDbUrl(){
+  getLocalDbUrl(){
     if(this.dbUrl === ''){
       const dbUrlFromLS = localStorage.getItem('dbUrl');
       const tokenObjectFromLS = localStorage.getItem('token');
@@ -44,5 +45,21 @@ export default reactive({
       }
     }
     return this.dbUrl;
-  }
+  },
+  alert: false,
+  async checkLogin() {
+     const result = await fetch(`${baseUrl}/repl_auth`);
+     const resultData = await result.json();
+     if(resultData != null){
+       this.userInfo.id = resultData.id;
+       this.userInfo.username = resultData.name;
+       this.loggedIn = true;
+     }
+  },
+  loggedIn: false,
+  userInfo: {
+    username: '',
+    id: ''
+  },
+  localOnly: import.meta.env.VITE_LOCAL_ONLY === 'true'
 });
