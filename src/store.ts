@@ -48,7 +48,7 @@ export default reactive({
   },
   alert: false,
   async checkLogin() {
-     const result = await fetch(`${baseUrl}/repl_auth`);
+     const result = await fetch(`${baseUrl}/api/repl_auth`);
      const resultData = await result.json();
      if(resultData != null){
        this.userInfo.id = resultData.id;
@@ -61,5 +61,6 @@ export default reactive({
     username: '',
     id: ''
   },
-  localOnly: import.meta.env.VITE_LOCAL_ONLY === 'true'
+  localOnly: import.meta.env.VITE_LOCAL_ONLY === 'true',
+  userDatabases:[{}]
 });

@@ -39,7 +39,8 @@ import {ref, defineProps} from 'vue';
 import store from '@/store';
 import jwt_decode from 'jwt-decode';
 import router from '@/router';
-
+import webclient from '@/services/webclient';
+const clientWithoutDbHeader = new webclient('');
 
 const dbUrl = ref('');
 const form = ref(false);
@@ -69,19 +70,30 @@ const rules = {
 
 async function submit(event: Event){
   event.preventDefault();
-  try {
-    const url = new URL(dbUrl.value);
-    const splitUrlPaths = url.pathname.split('/');
-    const token = splitUrlPaths[2];
-    const decodedToken: object = jwt_decode(token);
-    console.log(decodedToken);
-    store.setDbUrl(dbUrl.value, decodedToken);
-    router.push({'name': 'db-view', params: {id: 'local'}});
 
-  }catch (error: unknown){
-    alert('I have reason to believe that this is not a Replit db url. Check console for a tiny bit more info.');
-    console.log(error);
+  if(props.local){
+    try {
+      const url = new URL(dbUrl.value);
+      const splitUrlPaths = url.pathname.split('/');
+      const token = splitUrlPaths[2];
+      const decodedToken: object = jwt_decode(token);
+      store.setDbUrl(dbUrl.value, decodedToken);
+      router.push({'name': 'db-view', params: {id: 'local'}});
+    }catch (error: unknown){
+      alert('I have reason to believe that this is not a Replit db url. Check console for a tiny bit more info.');
+      console.log(error);
+    }
+  }else{
+    try {
+      await clientWithoutDbHeader.addDatabase(dbUrl.value);
+      store.userDatabases = await clientWithoutDbHeader.listDatabases();
+    }catch (error: unknown){
+      alert('I have reason to believe that this is not a Replit db url. Check console for a tiny bit more info.');
+      console.log('Can also be an issue with the server.');
+      console.log(error);
+    }
   }
+
 
 }
 

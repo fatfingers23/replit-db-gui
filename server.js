@@ -35,20 +35,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('/repl_auth', async (req, res) => {
-  let userInfo = null;
-  //If running on repl get info from request
-  if(process.env.REPL_OWNER){
-    userInfo = getUserInfo(req);
-  }else if(process.env.TEST_REPL_USERNAME){
-    //if not running on a repl use a test user
-    userInfo = {
-      id: process.env.TEST_REPL_USER_ID,
-      name: process.env.TEST_REPL_USERNAME
-    };
-  }
-  res.json(userInfo);
-});
+
 
 app.get('/keys', async (req, res) => {
   const dbUrl = req.header('db_url');

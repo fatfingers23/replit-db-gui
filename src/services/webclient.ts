@@ -75,6 +75,31 @@ export default class Webclient{
       throw error;
     }
   }
+  public async addDatabase(dbUrl:string): Promise<void>{
+    try {
+      const body = {
+        dbUrl: dbUrl
+      };
+      const postOptions = {headers: this.fetchOptions.headers, method: 'POST', body: JSON.stringify(body)};
+      await fetch(this.baseUrl + '/api/database/add' , postOptions);
+    }catch (error: unknown){
+      alert(this.errorMessage);
+      console.log(error);
+      throw error;
+    }
+  }
+
+  public async listDatabases(): Promise<Array<{ [key:string] : any }>>{
+    try {
+      const result = await fetch(this.baseUrl + '/api/database/list' , this.fetchOptions);
+      return await result.json();
+    }catch (error: unknown){
+      alert(this.errorMessage);
+      console.log('There was an error getting the databases from supabase. Guess you can call this a supa-problem');
+      console.log(error);
+      throw error;
+    }
+  }
 }
 
 

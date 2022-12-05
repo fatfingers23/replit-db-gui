@@ -42,10 +42,6 @@ import store from '@/store';
 import router from '@/router';
 
 
-
-
-
-
 function localLogout(){
   window.localStorage.clear();
   window.location.reload();
@@ -55,6 +51,7 @@ function accountLogout(){
   store.loggedIn = false;
   store.userInfo.id = '';
   store.userInfo.username = '';
+  store.userDatabases = [];
 }
 
 function LoginWithReplit() {
