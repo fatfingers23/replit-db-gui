@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
 import {getUserInfo} from '@replit/repl-auth';
 import jwt_decode from 'jwt-decode';
+import Client from '@replit/database';
 
 dotenv.config();
 
@@ -18,8 +19,9 @@ const getReplInfo = (req) => {
   }else if(process.env.TEST_REPL_USERNAME){
     //if not running on a repl use a test user
     userInfo = {
-      id: process.env.TEST_REPL_USER_ID,
-      name: process.env.TEST_REPL_USERNAME
+      id: process.env.TEST_REPL_USER_ID ?? '',
+      name: process.env.TEST_REPL_USERNAME,
+      profileImage: process.env.TEST_REPL_USER_PROFILE_PIC ?? ''
     };
   }
   return userInfo;
@@ -99,7 +101,12 @@ router.post('/database/add', async(req, res) => {
 
 router.get('/database/list', async (req, res) => {
   const userInfo = getReplInfo(req);
-  const {data, error} = await supabase.from('databases').select().eq('user_id', userInfo.id);
+  const {data, error} = await supabase.from('databases').select(
+    'user_id, database_id, created_at, db_url, token, url_expire_date, url_issued_at, slug,user, user_backups (database_id, created_at)'
+  ).eq('user_id', userInfo.id)
+    .order('created_at', {foreignTable: 'user_backups', ascending: false})
+    .limit(1, {foreignTable: 'user_backups'});
+
   if(data){
     res.json(data);
   }else{
@@ -108,5 +115,63 @@ router.get('/database/list', async (req, res) => {
   }
 });
 
+router.get('/database/backup/add', async (req, res) => {
+  const userInfo = getReplInfo(req);
+  const dbId = req.query.id;
+  const dbData = await supabase.from('databases')
+    .select()
+    .match({database_id: dbId, user_id: userInfo.id})
+    .limit(1).single();
+
+  if(dbData.error){
+    console.log(dbData.error);
+    return res.status(500).json('There was an issue getting the database');
+  }
+
+  if(dbData.data === null){
+    return res.status(404).json('Database not found');
+  }
+
+  if(new Date(dbData.data.url_expire_date) < new Date()){
+    return res.status(500).json('The token has expired. Need to update the db url');
+  }
+  const client = new Client(dbData.data.db_url);
+  const dbBackup = await client.getAll();
+  const { error } = await supabase
+    .from('user_backups')
+    .insert({
+      user_id: userInfo.id,
+      data: dbBackup,
+      database_id: dbId
+    });
+  if(error){
+    console.log(error);
+    return res.status(500).json('There was an issue saving the database');
+  }
+  return res.json('ok');
+});
+
+router.get('/database/delete', async (req, res) => {
+  const userInfo = getReplInfo(req);
+  const dbId = req.query.id;
+  const backupsDelete = await supabase
+    .from('user_backups')
+    .delete()
+    .match({database_id: dbId, user_id: userInfo.id});
+  if(backupsDelete.error){
+    console.log(backupsDelete.error);
+    return res.status(500).json('There was an issue deleting the database');
+  }
+
+  const dbsDelete = await supabase
+    .from('databases')
+    .delete()
+    .match({database_id: dbId, user_id: userInfo.id});
+  if(backupsDelete.error){
+    console.log(backupsDelete.error);
+    return res.status(500).json('There was an issue deleting the database');
+  }
+  return res.json('ok');
+});
 
 export default router;

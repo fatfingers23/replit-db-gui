@@ -39,7 +39,8 @@
               >
               </v-text-field>
               <v-container>
-                <v-btn variant="outlined" v-on:click="downloadBackup">
+                <v-btn variant="outlined"
+                       v-on:click="downloadBackup">
                   <v-icon>mdi-download</v-icon>
                   Download Backup
                 </v-btn>
@@ -89,8 +90,10 @@
                       Delete
                     </v-btn>
                   </div>
-                  <p v-show="!simpleEditor" class="text-h6">Note if there is no text below and this is a new key may have to click the three dots to create a new node</p>
-                  <p v-show="simpleEditor" class="text-h6">Note if the key's value is a JSON object this simple editor does not parse it, will want to use the JSON editor</p>
+                  <p v-show="!simpleEditor"
+                     class="text-h6">Note if there is no text below and this is a new key may have to click the three dots to create a new node</p>
+                  <p v-show="simpleEditor"
+                     class="text-h6">Note if the key's value is a JSON object this simple editor does not parse it, will want to use the JSON editor</p>
                   <v-expansion-panel-text v-show="values[key] === undefined">Loading...</v-expansion-panel-text>
                   <v-container v-show="values[key] !== undefined">
                     <json-editor-vue

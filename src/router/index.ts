@@ -30,17 +30,23 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   if(!store.loggedIn){
-    await store.checkLogin();
+    try {
+      await store.checkLogin();
+    }catch (e: unknown){
+
+    }
   }
 
   if(to.meta.requiresAuth){
+    console.log(store.loggedIn);
+
+    if(!store.loggedIn){
+      return {name:'home'};
+    }
     return store.loggedIn;
   }
 
-
   if(to.name === 'home' && store.loggedIn){
-    console.log('hey');
-
     return {name: 'db-list'};
   }
   return true;

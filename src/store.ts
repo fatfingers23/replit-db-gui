@@ -50,16 +50,19 @@ export default reactive({
   async checkLogin() {
      const result = await fetch(`${baseUrl}/api/repl_auth`);
      const resultData = await result.json();
-     if(resultData != null){
+     if(resultData != null && result.status === 200){
        this.userInfo.id = resultData.id;
        this.userInfo.username = resultData.name;
+       this.userInfo.profileImage = resultData.profileImage;
+
        this.loggedIn = true;
      }
   },
   loggedIn: false,
   userInfo: {
     username: '',
-    id: ''
+    id: '',
+    profileImage: ''
   },
   localOnly: import.meta.env.VITE_LOCAL_ONLY === 'true',
   userDatabases:[{}]

@@ -20,6 +20,22 @@
   ],
   "rules": {
     "quotes": ["error","single"],
-    "semi": 2
+    "semi": 2,
+    "vue/max-attributes-per-line": ["error", {
+      "singleline": {
+        "max": 1
+      },
+      "multiline": {
+        "max": 1
+      }
+    }],
+    "vue/html-indent": ["error", 2,{
+      "attribute": 1,
+      "baseIndent": 1,
+      "closeBracket": 0,
+      "alignAttributesVertically": true
+    }],
+    "template-curly-spacing": ["error", "never"]
+
   }
 }

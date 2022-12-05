@@ -6,7 +6,8 @@
   >
     <v-card-text>You can find your Replit DB Url by typing the command below into your Replit shell.</v-card-text>
     <v-code>echo "$REPLIT_DB_URL"</v-code>
-    <v-form v-on:submit="submit" v-model="form">
+    <v-form v-on:submit="submit"
+            v-model="form">
       <v-container>
         <v-text-field
           v-model="dbUrl"
@@ -24,9 +25,12 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="success" type="submit" :disabled="!form">
+        <v-btn color="success"
+               type="submit"
+               :disabled="!form">
           {{local ? 'View Database' : 'Add a new database'}}
-          <v-icon icon="mdi-chevron-right" end></v-icon>
+          <v-icon icon="mdi-chevron-right"
+                  end></v-icon>
         </v-btn>
       </v-card-actions>
     </v-form>
@@ -93,8 +97,6 @@ async function submit(event: Event){
       console.log(error);
     }
   }
-
-
 }
 
 </script>

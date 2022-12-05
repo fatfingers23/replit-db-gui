@@ -1,22 +1,22 @@
 <template>
   <v-app>
-<!--    <v-app-bar v-show="store.dbUrl !== ''">-->
-<!--      <v-app-bar-title>{{ store.token.slug ?? 'Replit Name' }} User: {{ store.token['user'] }} </v-app-bar-title>-->
-<!--      <v-app-bar-title>Expires: {{ store.viewExpireDate }} Issued at: {{ store.viewIssuedDate }} </v-app-bar-title>-->
-<!--      <v-btn variant="outlined" v-on:click="LoginWithReplit">Login</v-btn>-->
-<!--      <v-btn variant="outlined" v-on:click="logout">logout</v-btn>-->
-<!--    </v-app-bar>-->
     <v-app-bar>
-
+      <template v-if="store.loggedIn"
+                v-slot:prepend>
+        <v-app-bar-nav-icon v-on:click="drawer = !drawer"></v-app-bar-nav-icon>
+      </template>
       <v-app-bar-title>
         Replit DB VUI
+
       </v-app-bar-title>
 
 
-
-      <span class="mr-2 text-h6">{{store.userInfo.username}}</span>
-      <v-btn v-if="!store.loggedIn && !store.localOnly" variant="outlined" v-on:click="LoginWithReplit">Login</v-btn>
-      <v-btn v-if="store.loggedIn && !store.localOnly" variant="outlined" v-on:click="accountLogout">logout</v-btn>
+      <v-btn v-if="!store.loggedIn && !store.localOnly"
+             variant="outlined"
+             v-on:click="LoginWithReplit">Login</v-btn>
+      <v-btn v-if="store.loggedIn && !store.localOnly"
+             variant="outlined"
+             v-on:click="accountLogout">logout</v-btn>
       <v-btn v-if="(store.localOnly && store.dbUrl !== '') || !store.loggedIn && store.dbUrl !== ''"
              variant="outlined"
              v-on:click="localLogout"
@@ -25,10 +25,38 @@
       </v-btn>
 
     </v-app-bar>
-<!--    <v-navigation-drawer >...</v-navigation-drawer>-->
+    <v-navigation-drawer
+      v-if="store.loggedIn"
+      v-model="drawer"
+      temporary
+    >
+      <v-list-item
+        :prepend-avatar="store.userInfo.profileImage"
+        :title="store.userInfo.username"
+      ></v-list-item>
+
+      <v-divider></v-divider>
+
+      <v-list density="compact"
+              nav>
+        <v-list-item href="/databases/list"
+                     prepend-icon="mdi-database"
+                     title="Databases"
+                     value="db-list"></v-list-item>
+        <!--        <v-list-item prepend-icon="mdi-forum" title="About" value="about"></v-list-item>-->
+      </v-list>
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn block
+                 v-on:click="accountLogout">
+            Logout
+          </v-btn>
+        </div>
+      </template>
+    </v-navigation-drawer>
     <v-main>
-<!--      <database-enter v-if="store.dbUrl === ''" />-->
-<!--      <database-list v-if="store.dbUrl !== ''" />-->
+      <!--      <database-enter v-if="store.dbUrl === ''" />-->
+      <!--      <database-list v-if="store.dbUrl !== ''" />-->
       <RouterView />
 
     </v-main>
@@ -41,6 +69,7 @@ import {ref} from 'vue';
 import store from '@/store';
 import router from '@/router';
 
+const drawer = ref(false);
 
 function localLogout(){
   window.localStorage.clear();
@@ -52,6 +81,8 @@ function accountLogout(){
   store.userInfo.id = '';
   store.userInfo.username = '';
   store.userDatabases = [];
+  drawer.value = false;
+  router.push({name:'home'});
 }
 
 function LoginWithReplit() {
