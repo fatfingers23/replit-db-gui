@@ -40,6 +40,7 @@
                   <v-btn
                     variant="outlined"
                     color="yellow"
+                    :disabled="!valid"
                     prepend-icon="mdi-backup-restore"
                     v-on:click="() => {
                       restoreDialog = true;
@@ -112,7 +113,7 @@
 <script lang="ts" setup>
 import {useRoute} from 'vue-router';
 import Webclient from '@/services/webclient';
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import ReadonlyDBView from '@/components/ReadonlyDBView.vue';
 
 const client = new Webclient('');
@@ -123,6 +124,7 @@ const restoreDialog = ref(false);
 const viewDialog = ref(false);
 const selectedBackup = ref<{[key:string]: any}>();
 const viewingBackup = ref<{[key:string]: any}>();
+const valid = computed(() => new Date(database.value?.url_expire_date) > new Date());
 
 client.listBackups(routeId as string).then(x => database.value = x);
 

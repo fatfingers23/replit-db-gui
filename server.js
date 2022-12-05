@@ -12,6 +12,7 @@ app.use(cors({
   origin: [`https://replit.com/@${process.env.REPL_OWNER}/${process.env.REPL_SLUG}`,
     `http://localhost:${process.env.VUE_DEV_PORT}`,
     `http://127.0.0.1:${process.env.EXPRESS_DEV_PORT}`,
+    `http://localhost:${process.env.EXPRESS_DEV_PORT}`,
     'http://127.0.0.1:3001/repl_auth']
 }));
 app.use(express.json());

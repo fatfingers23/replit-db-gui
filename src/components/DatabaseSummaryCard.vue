@@ -53,6 +53,7 @@
 
     <v-card-actions>
       <v-btn
+        :disabled="!valid"
         v-on:click="viewDatabase"
         variant="outlined"
         class="ml-5 mb-3"
@@ -63,15 +64,17 @@
       <v-btn
         v-on:click="() => router.push({name:'db-backups', params:{id: props.database?.database_id}})"
         variant="outlined"
-        class="ml-5 mb-3"
+        class="ml-3 mb-3"
+        to="db-backups"
         prepend-icon="mdi-backup-restore"
       >
         View Backups
       </v-btn>
       <br>
       <v-btn
+        :disabled="!valid"
         variant="outlined"
-        class="mb-3 mr-5 ml-2"
+        class="mb-3 ml-3"
         prepend-icon="mdi-cloud-upload"
         v-on:click="createABackup"
       >
