@@ -167,11 +167,77 @@ router.get('/database/delete', async (req, res) => {
     .from('databases')
     .delete()
     .match({database_id: dbId, user_id: userInfo.id});
-  if(backupsDelete.error){
-    console.log(backupsDelete.error);
+  if(dbsDelete.error){
+    console.log(dbsDelete.error);
     return res.status(500).json('There was an issue deleting the database');
   }
   return res.json('ok');
 });
+
+router.get('/database/backups', async (req, res) => {
+  const userInfo = getReplInfo(req);
+  const dbId = req.query.id;
+  const backups = await supabase.from('databases').select(
+    'user_id, database_id, created_at, db_url, token, url_expire_date, url_issued_at, slug,user, user_backups (created_at, user_id, database_id, id)'
+  ).eq('user_id', userInfo.id)
+    .order('created_at', {foreignTable: 'user_backups', ascending: false})
+    .limit(1)
+    .single();
+
+  if(backups.error){
+    console.log(backups.error);
+    return res.status(500).json('There was an listing your backups');
+  }
+  return res.json(backups.data);
+});
+
+router.get('/database/backup/get', async (req, res) => {
+  const userInfo = getReplInfo(req);
+  const backupUpId = req.query.id;
+
+  const backup = await supabase.from('user_backups').select().match({user_id: userInfo.id, id: backupUpId})
+    .limit(1)
+    .single();
+
+  if(backup.error){
+    console.log(backup.error);
+    return res.status(500).json('There was an getting your backups');
+  }
+  return res.json(backup.data);
+});
+
+router.get('/database/backup/delete', async (req, res) => {
+  const userInfo = getReplInfo(req);
+  const backupUpId = req.query.id;
+  const backup = await supabase.from('user_backups').delete().match({user_id: userInfo.id, id: backupUpId});
+  if(backup.error){
+    console.log(backup.error);
+    return res.status(500).json('There was an getting your backups');
+  }
+  return res.json('ok');
+});
+
+router.get('/database/backup/restore', async (req, res) => {
+  const userInfo = getReplInfo(req);
+  const backupUpId = req.query.id;
+  const backup = await supabase
+    .from('user_backups')
+    .select('data, databases (db_url)')
+    .match({user_id: userInfo.id, id: backupUpId})
+    .limit(1)
+    .limit(1,  { foreignTable: 'databases' })
+    .single();
+
+  if(backup.error){
+    console.log(backup.error);
+    return res.status(500).json('There was an getting your backups');
+  }
+  const client = new Client(backup.data.databases.db_url);
+  await client.empty();
+  await client.setAll(backup.data.data);
+
+  return res.json('ok');
+});
+
 
 export default router;

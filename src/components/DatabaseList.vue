@@ -4,7 +4,7 @@
       <v-card
         class="mx-auto"
         :title="`Your database for ${store.token.slug}`"
-        v-model="panels">
+      >
         <v-card-subtitle>The token is issued to {{store.token.user}} and expires at {{store.viewExpireDate}} and was issued at {{store.viewIssuedDate}}
         </v-card-subtitle>
         <v-card-text v-if="store.expiredToken">

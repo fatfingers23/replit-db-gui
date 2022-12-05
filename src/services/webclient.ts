@@ -19,8 +19,8 @@ export default class Webclient{
       return await result.json() as Array<string>;
     }catch (error: unknown){
       alert(this.errorMessage);
-      console.log('There was an error getting the keys for the prefix: ' + prefix);
-      console.log(error);
+      console.error('There was an error getting the keys for the prefix: ' + prefix);
+      console.error(error);
       throw error;
     }
   }
@@ -31,8 +31,8 @@ export default class Webclient{
       return await result.json();
     }catch (error: unknown){
       alert(this.errorMessage);
-      console.log('There was an error getting the value of the key: ' + key);
-      console.log(error);
+      console.error('There was an error getting the value of the key: ' + key);
+      console.error(error);
       throw error;
     }
   }
@@ -46,9 +46,9 @@ export default class Webclient{
       await fetch(this.baseUrl + `/key?name=${key}` , postOptions);
     }catch (error: unknown){
       alert(this.errorMessage);
-      console.log('There was an error setting the value of the key: ' + key);
-      console.log(value);
-      console.log(error);
+      console.error('There was an error setting the value of the key: ' + key);
+      console.error(value);
+      console.error(error);
       throw error;
     }
   }
@@ -58,8 +58,8 @@ export default class Webclient{
       await fetch(this.baseUrl + `/delete/key?name=${key}` , this.fetchOptions);
     }catch (error: unknown){
       alert(this.errorMessage);
-      console.log('There was an error deleting the value of the key: ' + key);
-      console.log(error);
+      console.error('There was an error deleting the value of the key: ' + key);
+      console.error(error);
       throw error;
     }
   }
@@ -70,8 +70,8 @@ export default class Webclient{
       return await result.json();
     }catch (error: unknown){
       alert(this.errorMessage);
-      console.log('There was an error getting all the values.');
-      console.log(error);
+      console.error('There was an error getting all the values.');
+      console.error(error);
       throw error;
     }
   }
@@ -84,7 +84,7 @@ export default class Webclient{
       await fetch(this.baseUrl + '/api/database/add' , postOptions);
     }catch (error: unknown){
       alert(this.errorMessage);
-      console.log(error);
+      console.error(error);
       throw error;
     }
   }
@@ -95,16 +95,16 @@ export default class Webclient{
       try {
         return await  result.json();
       }catch (e) {
-        console.log(result.body);
+        console.error(result.body);
         throw new Error();
       }
 
     }catch (error: unknown){
-      console.log(error);
+      console.error(error);
 
       alert(this.errorMessage);
-      console.log('There was an error getting the databases from supabase. Guess you can call this a supa-problem');
-      console.log(error);
+      console.error('There was an error getting the databases from supabase. Guess you can call this a supa-problem');
+      console.error(error);
       throw error;
     }
   }
@@ -119,12 +119,12 @@ export default class Webclient{
       return  resultJson;
     }catch (error: unknown){
       alert(this.errorMessage);
-      console.log('There was an error creating a back up of the databases.');
-      console.log(error);
+      console.error('There was an error creating a back up of the databases.');
+      console.error(error);
       throw error;
     }
   }
-  
+
   public async deleteDatabase(dbId: string): Promise<void>{
     try {
       const result = await fetch(this.baseUrl + `/api/database/delete?id=${dbId}` , this.fetchOptions);
@@ -135,11 +135,79 @@ export default class Webclient{
       return  resultJson;
     }catch (error: unknown){
       alert(this.errorMessage);
-      console.log('There was an error creating a back up of the databases.');
-      console.log(error);
+      console.error('There was an error creating a back up of the databases.');
+      console.error(error);
       throw error;
     }
   }
+
+  public async listBackups(dbId:string): Promise<{ [key:string] : any }>{
+    try {
+      const result = await fetch(this.baseUrl + `/api/database/backups?id=${dbId}` , this.fetchOptions);
+      try {
+        if(result.status !== 200){
+          const error = await result.json();
+          console.error(error);
+          throw new Error();
+        }
+        return await result.json();
+      }catch (e) {
+
+        throw new Error();
+      }
+    }catch (error: unknown){
+      alert(this.errorMessage);
+      console.error(error);
+      throw error;
+    }
+  }
+
+  public async deleteBackup(backupId:bigint): Promise<{ [key:string] : any }>{
+    try {
+      const result = await fetch(this.baseUrl + `/api/database/backup/delete?id=${backupId}` , this.fetchOptions);
+      return this.handleWebRequest(result);
+    }catch (error: unknown){
+      alert(this.errorMessage);
+      console.error(error);
+      throw error;
+    }
+  }
+
+  public async restoreBackup(backupId:bigint): Promise<{ [key:string] : any }>{
+    try {
+      const result = await fetch(this.baseUrl + `/api/database/backup/restore?id=${backupId}` , this.fetchOptions);
+      return this.handleWebRequest(result);
+    }catch (error: unknown){
+      alert(this.errorMessage);
+      console.error(error);
+      throw error;
+    }
+  }
+
+  public async getBackup(backupId:bigint): Promise<{ [key:string] : any }>{
+    try {
+      const result = await fetch(this.baseUrl + `/api/database/backup/get?id=${backupId}` , this.fetchOptions);
+      return this.handleWebRequest(result);
+    }catch (error: unknown){
+      alert(this.errorMessage);
+      console.error(error);
+      throw error;
+    }
+  }
+
+  private async handleWebRequest(result: Response): Promise<any>{
+    try {
+      if(result.status !== 200){
+        const error = await result.json();
+        console.error(error);
+        throw new Error();
+      }
+      return await result.json();
+    }catch (e) {
+      throw new Error();
+    }
+  }
+
 }
 
 

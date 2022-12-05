@@ -20,7 +20,7 @@
       </template>
 
       <v-toolbar-title class="text-h5">
-        <a :href="replitUrl"> {{props.database.slug}} </a>
+        <a :href="replitUrl"> {{props.database?.slug}} </a>
       </v-toolbar-title>
 
       <template v-slot:append>
@@ -37,9 +37,9 @@
                  type="warning"
                  variant="outlined" >You can enter in a new DB url in the above input to update this DB back to a vavlid saved token</v-alert>
         <v-list>
-          <v-list-item>User: {{props.database.user}}</v-list-item>
-          <v-list-item>Issued at: {{new Date(props.database.url_issued_at).toLocaleString()}}</v-list-item>
-          <v-list-item>Expires at: {{new Date(props.database.url_expire_date).toLocaleString()}}</v-list-item>
+          <v-list-item>User: {{props.database?.user}}</v-list-item>
+          <v-list-item>Issued at: {{new Date(props.database?.url_issued_at).toLocaleString()}}</v-list-item>
+          <v-list-item>Expires at: {{new Date(props.database?.url_expire_date).toLocaleString()}}</v-list-item>
           <v-list-item>Last backup: <span class="font-weight-bold">{{lastBackup}}
             <v-tooltip
               activator="parent"
@@ -60,10 +60,18 @@
       >
         view database
       </v-btn>
-      <v-spacer/>
+      <v-btn
+        v-on:click="() => router.push({name:'db-backups', params:{id: props.database?.database_id}})"
+        variant="outlined"
+        class="ml-5 mb-3"
+        prepend-icon="mdi-backup-restore"
+      >
+        View Backups
+      </v-btn>
+      <br>
       <v-btn
         variant="outlined"
-        class="mb-3 mr-5"
+        class="mb-3 mr-5 ml-2"
         prepend-icon="mdi-cloud-upload"
         v-on:click="createABackup"
       >
@@ -126,9 +134,9 @@ const replitUrl = `https://replit.com/@${props.database?.user}/${props.database?
 const lastBackupFull = props.database?.user_backups.length === 0 ? 'Never' : new Date(props.database?.user_backups[0].created_at).toLocaleString();
 const lastBackup = props.database?.user_backups.length === 0 ? 'Never' : DateTime.fromISO(props.database?.user_backups[0].created_at).toRelative();
 
-function viewDatabase(){
+async function viewDatabase(){
   store.setDbUrl(props.database?.db_url, jwt_decode(props.database?.token));
-  router.push({'name': 'db-view', params: {id: props.database?.database_id}});
+  await router.push({'name': 'db-view', params: {id: props.database?.database_id}});
 }
 
 async function createABackup(){

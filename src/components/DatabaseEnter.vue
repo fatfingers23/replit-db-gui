@@ -82,7 +82,7 @@ async function submit(event: Event){
       const token = splitUrlPaths[2];
       const decodedToken: object = jwt_decode(token);
       store.setDbUrl(dbUrl.value, decodedToken);
-      router.push({'name': 'db-view', params: {id: 'local'}});
+      await router.push({'name': 'db-view', params: {id: 'local'}});
     }catch (error: unknown){
       alert('I have reason to believe that this is not a Replit db url. Check console for a tiny bit more info.');
       console.log(error);

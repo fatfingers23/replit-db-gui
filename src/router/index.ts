@@ -24,6 +24,12 @@ const router = createRouter({
       name: 'db-list',
       component: () => import('@/views/DatabasesView.vue'),
       meta:{ requiresAuth: true}
+    },
+    {
+      path: '/databases/backups/:id',
+      name: 'db-backups',
+      component: () => import('@/views/BackupsList.vue'),
+      meta:{ requiresAuth: true}
     }
   ]
 });

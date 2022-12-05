@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineAsyncComponent, ref} from 'vue';
+import {Component, computed, defineAsyncComponent, ref} from 'vue';
 import DatabaseEnter from '@/components/DatabaseEnter.vue';
 import store from '@/store.js';
 import webclient from '@/services/webclient';
@@ -37,7 +37,7 @@ import { useDisplay } from 'vuetify';
 import loading from '@/components/LoadingComponent.vue';
 
 const clientWithoutDbHeader = new webclient('');
-let AsyncDatabaseSummaryCard;
+let AsyncDatabaseSummaryCard: Component;
 
 // const loading = ref(true);
 
@@ -52,7 +52,6 @@ function loadDbs(){
 }
 
 loadDbs();
-
 
 
 const cols = computed(() => {
