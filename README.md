@@ -1,27 +1,21 @@
 # Replit DB GUI
 
-This is just a simple GUI used for CRUD opertations on a Replt.it db
+A web app for managing your Replit DBs.
 
-![Photo of app](pictures/photo-of-app.png)
+![Photo of app](pictures/login-landing-page.png)
 
 ## Features
-* Read Database Keys and filter by prefix
-* Edit String and JSON object values with [json-editor-vue](https://www.npmjs.com/package/json-editor-vue)
-* Delete Keys
-* Add new Keys, then can edit the value
-* Download a backup of your server
-* Login with your Repl Account
-* Take server backups
-  * View backups
-  * Restore
-  * Delete
-* (Coming soon) Reminders when your DB url is going expire
-* (Coming soon) Daily backups as long as your DB url is valid
+* Able to access any Replit's database by it's URL.
+* Able to read, add, edit, and delete the database keys with two editors. One simple editor just for simple keys and [json-editor-vue](https://www.npmjs.com/package/json-editor-vue) for your more complex JSON objects.
+* Ability to login with your repl and save multiple database urls for quicker managment.
+* Once logged in you can create backups, restore, and delete backups!
+
 
 ## Technology used
 * Vue 3
 * Vuetify for styling
 * Express to handle all calls to the remote Replit DB
+* [supabase](https://supabase.com) for storing database backups.
 
 ## Production setup
 
