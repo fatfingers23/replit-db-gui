@@ -72,7 +72,7 @@
     <v-dialog
       v-model="
         restoreDialog"
-      width="50%"
+      :width="mobile ? '100%' : '50%'"
     >
       <v-card>
         <v-toolbar
@@ -107,6 +107,7 @@
     fullscreen
   >
     <readonly-d-b-view :database="database"
+                       @close="viewDialog = false"
                        :backup="viewingBackup" />
   </v-dialog>
 </template>
@@ -116,7 +117,8 @@ import {useRoute} from 'vue-router';
 import Webclient from '@/services/webclient';
 import {computed, ref} from 'vue';
 import ReadonlyDBView from '@/components/ReadonlyDBView.vue';
-
+import {useDisplay} from 'vuetify';
+const { mobile } = useDisplay();
 const client = new Webclient('');
 const route = useRoute();
 const routeId = route.params.id;
