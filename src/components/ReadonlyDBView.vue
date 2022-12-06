@@ -13,7 +13,7 @@
     </v-toolbar>
 
     <v-card-title>
-      This is a read only snap shot of your database {{props.database?.slug}} at {{new Date(props.backup?.created_at).toLocaleString()}}
+      This is a read only snapshot of your database {{props.database?.slug}} at {{new Date(props.backup?.created_at).toLocaleString()}}
     </v-card-title>
     <v-card-text>
       <json-editor-vue

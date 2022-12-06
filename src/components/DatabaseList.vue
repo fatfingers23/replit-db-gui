@@ -13,7 +13,7 @@
             type="error"
             variant="outlined"
           >
-            You will need to get a new REPLIT DB URL. This one expired at {{store.viewExpireDate}}. Can press Logout above to enter a new url.
+            You will need to get a new REPLIT DB URL. This one expired at {{store.viewExpireDate}}. Can press clear loaded database above to enter a new url.
           </v-alert>
         </v-card-text>
         <v-card-text v-if="!store.expiredToken">

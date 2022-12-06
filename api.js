@@ -175,7 +175,7 @@ router.get('/database/backups', async (req, res) => {
   const dbId = req.query.id;
   const backups = await supabase.from('databases').select(
     'user_id, database_id, created_at, db_url, token, url_expire_date, url_issued_at, slug,user, user_backups (created_at, user_id, database_id, id)'
-  ).eq('user_id', userInfo.id)
+  ).match({user_id: userInfo.id, database_id: dbId})
     .order('created_at', {foreignTable: 'user_backups', ascending: false})
     .limit(1)
     .single();
