@@ -4,7 +4,9 @@
       <v-card
         class="mx-auto"
         :title="`Your database for ${store.token.slug}`"
-        v-model="panels">
+      >
+        <v-card-subtitle>The token is issued to {{store.token.user}} and expires at {{store.viewExpireDate}} and was issued at {{store.viewIssuedDate}}
+        </v-card-subtitle>
         <v-card-text v-if="store.expiredToken">
           <v-alert
             prominent
@@ -17,6 +19,8 @@
         <v-card-text v-if="!store.expiredToken">
           <v-container>
             <v-responsive>
+
+
               <v-text-field
                 color="primary"
                 label="Search For Key By Prefix"
@@ -35,7 +39,8 @@
               >
               </v-text-field>
               <v-container>
-                <v-btn variant="outlined" v-on:click="downloadBackup">
+                <v-btn variant="outlined"
+                       v-on:click="downloadBackup">
                   <v-icon>mdi-download</v-icon>
                   Download Backup
                 </v-btn>
@@ -85,8 +90,10 @@
                       Delete
                     </v-btn>
                   </div>
-                  <p v-show="!simpleEditor" class="text-h6">Note if there is no text below and this is a new key may have to click the three dots to create a new node</p>
-                  <p v-show="simpleEditor" class="text-h6">Note if the key's value is a JSON object this simple editor does not parse it, will want to use the JSON editor</p>
+                  <p v-show="!simpleEditor"
+                     class="text-h6">Note if there is no text below and this is a new key may have to click the three dots to create a new node</p>
+                  <p v-show="simpleEditor"
+                     class="text-h6">Note if the key's value is a JSON object this simple editor does not parse it, will want to use the JSON editor</p>
                   <v-expansion-panel-text v-show="values[key] === undefined">Loading...</v-expansion-panel-text>
                   <v-container v-show="values[key] !== undefined">
                     <json-editor-vue
@@ -117,13 +124,14 @@
 
 <script setup lang="ts">
 //
-import {ref} from 'vue';
+import {defineProps, ref} from 'vue';
 import store from '@/store';
 import webclient from '@/services/webclient';
 import {debounce} from 'ts-debounce';
 import 'vanilla-jsoneditor/themes/jse-theme-dark.css';
 import JsonEditorVue from 'json-editor-vue';
 const client = new webclient(store.dbUrl);
+
 
 let keys = ref<string[]>([]);
 let panels = ref<string[]>([]);
@@ -133,7 +141,6 @@ let values = ref<GenericObject>({});
 let newKeyValue = ref('');
 let simpleEditor = ref(false);
 let disableSave = ref<{ [key: string]: boolean}>({});
-
 
 const turnOnSave = (key: string) => {
   if(values.value[key] !== undefined){

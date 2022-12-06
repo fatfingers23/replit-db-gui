@@ -10,8 +10,13 @@ This is just a simple GUI used for CRUD opertations on a Replt.it db
 * Delete Keys
 * Add new Keys, then can edit the value
 * Download a backup of your server
-* (Coming soon?) Update from a backup
-* (Coming soon?) Repl Auth with saving databases to a profile
+* Login with your Repl Account
+* Take server backups
+  * View backups
+  * Restore
+  * Delete
+* (Coming soon) Reminders when your DB url is going expire
+* (Coming soon) Daily backups as long as your DB url is valid
 
 ## Technology used
 * Vue 3
@@ -38,22 +43,22 @@ npm run start:server
 
 Now you can visit [http://localhost:3001](http://localhost:3001) for the web app.
 
-### Developer setup
+## Developer setup
 
 ```
 npm install
 ```
 
-## Starting express server
+### Starting express server
 This hosts an API to be able to access a remote Replits db.
 The url should be [http://localhost:3001](http://localhost:3001). 
 ```
 npm run start:server
 ```
 
-## Starting Vite Vue server
+### Starting Vite Vue server
 
-Make a copy of `env.local.save` and make sure to set it to the value of your express server.
+Make a copy of `env.save` and make sure to set it to the value of your express server.
 Most of the time this will be `http://127.0.0.1:3001` with current config. Then run the below to start the Vue project.
 ```
 npm run dev
