@@ -132,20 +132,6 @@ import 'vanilla-jsoneditor/themes/jse-theme-dark.css';
 import JsonEditorVue from 'json-editor-vue';
 const client = new webclient(store.dbUrl);
 
-const props = defineProps({
-  dbUrl: String,
-  token: {
-    type: Object,
-    default(){
-      return {
-        iat: 0,
-        exp:0,
-        user: '',
-        slug: '',
-      };
-    }
-  }
-});
 
 let keys = ref<string[]>([]);
 let panels = ref<string[]>([]);

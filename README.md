@@ -10,8 +10,13 @@ This is just a simple GUI used for CRUD opertations on a Replt.it db
 * Delete Keys
 * Add new Keys, then can edit the value
 * Download a backup of your server
-* (Coming soon?) Update from a backup
-* (Coming soon?) Repl Auth with saving databases to a profile
+* Login with your Repl Account
+* Take server backups
+  * View backups
+  * Restore
+  * Delete
+* (Coming soon) Reminders when your DB url is going expire
+* (Coming soon) Daily backups as long as your DB url is valid
 
 ## Technology used
 * Vue 3

@@ -57,14 +57,6 @@ router.get('/repl_auth', async (req, res) => {
   res.json(userInfo);
 });
 
-
-router.get('/test', async (req, res) => {
-
-// Create a single supabase client for interacting with your database
-  const {data, error} = await supabase.from('repl_users').select();
-  res.json(data);
-});
-
 router.post('/database/add', async(req, res) => {
   const dbUrl = req.body.dbUrl;
   const userInfo = getReplInfo(req);
