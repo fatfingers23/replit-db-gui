@@ -104,6 +104,7 @@
   <!-- view dialog -->
   <v-dialog
     v-model="viewDialog"
+    fullscreen
   >
     <readonly-d-b-view :database="database"
                        :backup="viewingBackup" />

@@ -57,6 +57,10 @@ router.get('/repl_auth', async (req, res) => {
   res.json(userInfo);
 });
 
+router.get('/logout', async (req, res) => {
+  res.clearCookie('REPL_AUTH');
+  return res.json('ok');
+});
 router.post('/database/add', async(req, res) => {
   const dbUrl = req.body.dbUrl;
   const userInfo = getReplInfo(req);

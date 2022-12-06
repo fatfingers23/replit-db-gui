@@ -2,7 +2,7 @@
   <v-card
     class="mx-auto"
     title="Enter your Replit DB URL"
-    width="75%"
+    :width="mobile ? '100%' : '75%'"
   >
     <v-card-text>You can find your Replit DB Url by typing the command below into your Replit shell.</v-card-text>
     <v-code>echo "$REPLIT_DB_URL"</v-code>
@@ -42,12 +42,14 @@
 import {ref, defineProps} from 'vue';
 import store from '@/store';
 import jwt_decode from 'jwt-decode';
-import router from '@/router';
+import router from '@/router/index';
 import webclient from '@/services/webclient';
+import {useDisplay} from 'vuetify';
 const clientWithoutDbHeader = new webclient('');
 
 const dbUrl = ref('');
 const form = ref(false);
+const { mobile } = useDisplay();
 
 const props = defineProps({
   local: {

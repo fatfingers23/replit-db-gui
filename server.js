@@ -17,7 +17,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-if(process.env.VITE_LOCAL_ONLY != 'true' || process.env.VITE_LOCAL_ONLY === 'undefined'){
+if(process.env.VITE_LOCAL_ONLY === 'undefined' || process.env.VITE_LOCAL_ONLY != 'true'){
   app.use('/api',api);
 }
 

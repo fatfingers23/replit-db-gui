@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="fill-height h-100" >
     <v-card-title>
       This is a read only snap shot of your database {{props.database?.slug}} at {{new Date(props.backup?.created_at).toLocaleString()}}
     </v-card-title>

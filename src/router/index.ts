@@ -39,12 +39,11 @@ router.beforeEach(async (to, from) => {
     try {
       await store.checkLogin();
     }catch (e: unknown){
-
+      console.log('not able to check for login');
     }
   }
 
   if(to.meta.requiresAuth){
-    console.log(store.loggedIn);
 
     if(!store.loggedIn){
       return {name:'home'};

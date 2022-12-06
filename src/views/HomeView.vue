@@ -6,7 +6,7 @@
                   class="d-flex align-center">
       <div class="d-flex justify-center">
         <v-card class="ma-4"
-                width="75%">
+                :width="mobile ? '100%' :'75%'">
           <div class="ma-4">
             <v-card-title class="text-xs-h6 text-md-h5 text-lg-h4">Welcome to Replit DB VUI</v-card-title>
             <v-card-subtitle>
@@ -27,8 +27,7 @@
     </v-responsive>
     <v-dialog
       v-model="store.alert"
-
-      width="50%"
+      :width="mobile ? '100%' :'50%'"
     >
       <v-card >
         <v-card-text>
@@ -52,8 +51,9 @@ import DatabaseEnter from '@/components/DatabaseEnter.vue';
 import {ref} from 'vue';
 import store from '@/store';
 import router from '@/router';
+import {useDisplay} from 'vuetify';
 
-console.log(!store.loggedIn && store.dbUrl !== '');
+const { mobile } = useDisplay();
 
 if(store.localOnly){
   store.getLocalDbUrl();

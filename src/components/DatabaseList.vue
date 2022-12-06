@@ -66,8 +66,9 @@
               <v-expansion-panel-title v-on:click="getKeyValue(key)">{{ key }}</v-expansion-panel-title>
               <v-expansion-panel-text>
                 <v-container>
-                  <div class="d-flex justify-space-around mb-4">
+                  <div class="d-flex flex-wrap justify-space-around mb-4">
                     <v-btn
+                      class="mb-2"
                       :disabled="disableSave[key]"
                       variant="outlined"
                       v-on:click="updateKeyValue(key)">
@@ -75,13 +76,15 @@
                       Save
                     </v-btn>
                     <v-btn
+                      class="mb-2"
                       variant="outlined"
                       v-on:click="simpleEditor = !simpleEditor">
                       <v-icon>mdi-file-document-edit-outline</v-icon>
-                      {{simpleEditor ?   'Use the JSON Editor (for complex objects)'  : 'Use The Simple Editor (For string values)'}}
+                      {{simpleEditor ?   'Use the JSON Editor'  : 'Use The Simple Editor'}}
 
                     </v-btn>
                     <v-btn
+                      class="mb-2"
                       color="error"
                       variant="outlined"
                       v-on:click="deleteKey(key)"
@@ -95,7 +98,8 @@
                   <p v-show="simpleEditor"
                      class="text-h6">Note if the key's value is a JSON object this simple editor does not parse it, will want to use the JSON editor</p>
                   <v-expansion-panel-text v-show="values[key] === undefined">Loading...</v-expansion-panel-text>
-                  <v-container v-show="values[key] !== undefined">
+                  <div v-show="values[key] !== undefined"
+                       class="w-100">
                     <json-editor-vue
                       v-if="!simpleEditor && values[key] !== undefined"
                       v-model="values[key]"
@@ -109,7 +113,7 @@
                       v-on:change="turnOnSave(key)"
                       v-model="values[key]"
                     ></v-textarea>
-                  </v-container>
+                  </div>
 
                 </v-container>
               </v-expansion-panel-text>
@@ -130,8 +134,10 @@ import webclient from '@/services/webclient';
 import {debounce} from 'ts-debounce';
 import 'vanilla-jsoneditor/themes/jse-theme-dark.css';
 import JsonEditorVue from 'json-editor-vue';
+import {useDisplay} from 'vuetify';
 const client = new webclient(store.dbUrl);
 
+const { mobile } = useDisplay();
 
 let keys = ref<string[]>([]);
 let panels = ref<string[]>([]);

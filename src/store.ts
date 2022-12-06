@@ -1,5 +1,6 @@
 import {reactive} from 'vue';
 
+console.log(import.meta.env.VITE_LOCAL_ONLY === undefined);
 const setGetFriendlyDate = (timestamp: number): string => {
   const date = new Date(0);
   date.setSeconds(timestamp);
@@ -54,7 +55,6 @@ export default reactive({
        this.userInfo.id = resultData.id;
        this.userInfo.username = resultData.name;
        this.userInfo.profileImage = resultData.profileImage;
-
        this.loggedIn = true;
      }
   },
@@ -64,6 +64,6 @@ export default reactive({
     id: '',
     profileImage: ''
   },
-  localOnly: import.meta.env.VITE_LOCAL_ONLY === 'true',
+  localOnly: import.meta.env.VITE_LOCAL_ONLY === 'true' || import.meta.env.VITE_LOCAL_ONLY === undefined,
   userDatabases:[{}]
 });

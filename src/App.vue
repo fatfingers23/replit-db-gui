@@ -76,13 +76,14 @@ function localLogout(){
   window.location.reload();
 }
 
-function accountLogout(){
+async function accountLogout(){
   store.loggedIn = false;
   store.userInfo.id = '';
   store.userInfo.username = '';
   store.userDatabases = [];
   drawer.value = false;
-  router.push({name:'home'});
+  await fetch('/api/logout');
+  await router.push({name:'home'});
 }
 
 function LoginWithReplit() {

@@ -51,7 +51,7 @@
       </div>
     </v-card-item>
 
-    <v-card-actions>
+    <v-card-actions class="d-flex flex-wrap ">
       <v-btn
         :disabled="!valid"
         v-on:click="viewDatabase"
@@ -83,7 +83,7 @@
     </v-card-actions>
     <v-dialog
       v-model="deleteDialog"
-      width="50%"
+      :width="mobile ? '100%' : '50%'"
     >
       <v-card>
         <v-toolbar
@@ -115,13 +115,14 @@
 
 <script setup lang="ts">
 import store from '@/store';
-import router from '@/router';
+import router from '@/router/index';
 import jwt_decode from 'jwt-decode';
 import Webclient from '@/services/webclient';
 import { DateTime } from 'ts-luxon';
 import {ref} from 'vue';
-import {tr} from 'vuetify/locale';
+import {useDisplay} from 'vuetify';
 const emit = defineEmits(['refresh']);
+const { mobile } = useDisplay();
 
 const client = new Webclient('');
 const props = defineProps({
