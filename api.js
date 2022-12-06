@@ -37,7 +37,7 @@ const getTokenFromUrl = (dbUrl) => {
 };
 
 router.use(function(req, res, next) {
-  if(getReplInfo() === null){
+  if(getReplInfo(req) === null){
     return res.status(403).json({ error: 'Need to be an authenticated Repl user.' });
   }
   next();
