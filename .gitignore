@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
-
+/dist
+.env.local
+.env
 
 # local env files
 .env.*.local
@@ -20,4 +22,3 @@ pnpm-debug.log*
 *.sln
 *.sw?
 idea
-.env
