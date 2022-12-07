@@ -92,8 +92,8 @@ async function submit(event: Event){
   }else{
     try {
       await clientWithoutDbHeader.addDatabase(dbUrl.value);
-      store.userDatabases = await clientWithoutDbHeader.listDatabases();
       emits('refresh');
+      dbUrl.value = '';
     }catch (error: unknown){
       alert('I have reason to believe that this is not a Replit db url. Check console for a tiny bit more info.');
       console.log('Can also be an issue with the server.');
