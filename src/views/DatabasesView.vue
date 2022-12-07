@@ -3,7 +3,8 @@
     class="fill-height"
   >
     <v-responsive class="d-flex align-center text-center">
-      <database-enter :local="false"/>
+      <database-enter @refresh="loadDbs"
+                      :local="false"/>
     </v-responsive>
     <v-container v-if="store.userDatabases.length === 0"
                  class=" mt-5 text-center">

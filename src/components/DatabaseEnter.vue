@@ -50,7 +50,7 @@ const clientWithoutDbHeader = new webclient('');
 const dbUrl = ref('');
 const form = ref(false);
 const { mobile } = useDisplay();
-
+const emits = defineEmits(['refresh']);
 const props = defineProps({
   local: {
     type: Boolean,
@@ -93,6 +93,7 @@ async function submit(event: Event){
     try {
       await clientWithoutDbHeader.addDatabase(dbUrl.value);
       store.userDatabases = await clientWithoutDbHeader.listDatabases();
+      emits('refresh');
     }catch (error: unknown){
       alert('I have reason to believe that this is not a Replit db url. Check console for a tiny bit more info.');
       console.log('Can also be an issue with the server.');
